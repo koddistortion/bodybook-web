@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta name="description" content="bootstrap admin template">
+	<meta name="author" content="">
+
+	<title>{% block title %}{% endblock %}</title>
+
+	<link rel="apple-touch-icon" href="{{ asset('remark/images/apple-touch-icon.png') }}">
+	<link rel="shortcut icon" href="{{ asset('remark/images/favicon.ico') }}">
+
+	<!-- Stylesheets -->
+	{% block stylesheets_core %}
+		<link rel="stylesheet" href="{{ asset('remark/css/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/css/bootstrap-extend.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/css/site.min.css') }}">
+	{% endblock %}
+
+	<!-- Plugins -->
+	{% block stylesheets_vendor %}
+		<link rel="stylesheet" href="{{ asset('remark/vendor/animsition/animsition.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/vendor/asscrollable/asScrollable.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/vendor/switchery/switchery.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/vendor/intro-js/introjs.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/vendor/slidepanel/slidePanel.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/vendor/flag-icon-css/flag-icon.css') }}">
+	{% endblock %}
+
+	{% block stylesheets %}
+
+	{% endblock %}
+
+	<!-- Fonts -->
+	{% block fonts %}
+		<link rel="stylesheet" href="{{ asset('remark/fonts/web-icons/web-icons.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('remark/fonts/brand-icons/brand-icons.min.css') }}">
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+	{% endblock %}
+
+	<!--[if lt IE 9]>
+	<script src="{{ asset('remark/vendor/html5shiv/html5shiv.min.js') }}"></script>
+	<![endif]-->
+
+	<!--[if lt IE 10]>
+	<script src="{{ asset('remark/vendor/media-match/media.match.min.js') }}'"></script>
+	<script src="{{ asset('remark/vendor/respond/respond.min.js') }}"></script>
+	<![endif]-->
+
+	<!-- Scripts -->
+	<script src="{{ asset('remark/vendor/breakpoints/breakpoints.js') }}"></script>
+	<script>
+		Breakpoints();
+	</script>
+</head>
+<body class="animsition site-navbar-small">
+	<!--[if lt IE 8]>
+		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+
+	{% block site_navbar %}
+		{% include '_base/site_navbar.html.twig' %}
+	{% endblock %}
+	{% block site_menubar %}
+		{% include '_base/site_menubar.html.twig' %}
+	{% endblock %}
+
+	{% block body %}
+		<h2>Hello World</h2>
+	{% endblock %}
+
+	<footer class="site-footer">
+		<div class="site-footer-legal">© 2018 <a href="http://themeforest.net/item/remark-responsive-bootstrap-admin-template/11989202">Remark</a></div>
+		<div class="site-footer-right">
+			Crafted with <i class="red-600 wb wb-heart"></i> by <a href="https://themeforest.net/user/creation-studio">Creation Studio</a>
+		</div>
+	</footer>
+
+	{% block scripts_after_body %}
+		{% block scripts_after_body_core %}
+		<!-- Core  -->
+		<script src="{{ asset('remark/vendor/babel-external-helpers/babel-external-helpers.js') }}"></script>
+		<script src="{{ asset('remark/vendor/jquery/jquery.js') }}"></script>
+		<script src="{{ asset('remark/vendor/popper-js/umd/popper.min.js') }}"></script>
+		<script src="{{ asset('remark/vendor/bootstrap/bootstrap.js') }}"></script>
+		<script src="{{ asset('remark/vendor/animsition/animsition.js') }}"></script>
+		<script src="{{ asset('remark/vendor/mousewheel/jquery.mousewheel.js') }}"></script>
+		<script src="{{ asset('remark/vendor/asscrollbar/jquery-asScrollbar.js') }}"></script>
+		<script src="{{ asset('remark/vendor/asscrollable/jquery-asScrollable.js') }}"></script>
+		{% endblock scripts_after_body_core %}
+
+		<!-- Plugins -->
+		{% block scripts_after_body_vendor %}
+		<script src="{{ asset('remark/vendor/switchery/switchery.js') }}"></script>
+		<script src="{{ asset('remark/vendor/intro-js/intro.js') }}"></script>
+		<script src="{{ asset('remark/vendor/screenfull/screenfull.js') }}"></script>
+		<script src="{{ asset('remark/vendor/slidepanel/jquery-slidePanel.js') }}"></script>
+		{% endblock scripts_after_body_vendor %}
+
+		<!-- Scripts -->
+		{% block scripts_after_body_scripts %}
+		<script src="{{ asset('remark/js/Component.js') }}"></script>
+		<script src="{{ asset('remark/js/Plugin.js') }}"></script>
+		<script src="{{ asset('remark/js/Base.js') }}"></script>
+		<script src="{{ asset('remark/js/Config.js') }}"></script>
+
+		<script src="{{ asset('remark/js/Section/Menubar.js') }}"></script>
+		<script src="{{ asset('remark/js/Section/Sidebar.js') }}"></script>
+		<script src="{{ asset('remark/js/Section/PageAside.js') }}"></script>
+		<script src="{{ asset('remark/js/Plugin/menu.js') }}"></script>
+		{% endblock scripts_after_body_scripts %}
+
+		<!-- Config -->
+		{% block scripts_after_body_config %}
+		<script src="{{ asset('remark/js/config/colors.js') }}"></script>
+		<script>Config.set('assets', '{{ asset('remark') }}');</script>
+		{% endblock scripts_after_body_config %}
+
+		{% block scripts_after_body_page %}
+		<!-- Page -->
+		<script src="{{ asset('remark/js/Site.js') }}"></script>
+		<script src="{{ asset('remark/js/Plugin/asscrollable.js') }}"></script>
+		<script src="{{ asset('remark/js/Plugin/slidepanel.js') }}"></script>
+		<script src="{{ asset('remark/js/Plugin/switchery.js') }}"></script>
+		{% endblock scripts_after_body_page %}
+
+		{% block scripts_after_body_setup %}
+		<script>
+			(function(document, window, $){
+				'use strict';
+
+				var Site = window.Site;
+				$(document).ready(function(){
+					Site.run();
+				});
+			})(document, window, jQuery);
+		</script>
+		{% endblock scripts_after_body_setup %}
+
+	{% endblock scripts_after_body %}
+</body>
+</html>
