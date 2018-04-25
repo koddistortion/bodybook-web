@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the BodyBook.
  *
  * (c) Oliver "koddistortion" Kotte
@@ -8,10 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Controller;
+namespace Koddistortion\BodyBook\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LuckyController extends Controller {

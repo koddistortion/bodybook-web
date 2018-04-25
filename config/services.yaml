@@ -14,15 +14,27 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    Koddistortion\BodyBook\:
         resource: '../src/*'
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
+    Koddistortion\BodyBook\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Koddistortion\BodyBook\Menu\AbstractMenuBuilder:
+      arguments: ["@knp_menu.factory"]
+      abstract: true
+
+    Koddistortion\BodyBook\Menu\MenuBarBuilder:
+      parent: Koddistortion\BodyBook\Menu\AbstractMenuBuilder
+      public: true
+      autowire: true
+      autoconfigure: false
+      tags:
+          - { name: knp_menu.menu_builder, method: createMenuBar, alias: menubar }

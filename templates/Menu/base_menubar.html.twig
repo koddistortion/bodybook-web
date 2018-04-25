@@ -1,0 +1,155 @@
+{% extends '@KnpMenu/menu.html.twig' %}
+
+{% block root %}
+	{% set listAttributes = item.childrenAttributes %}
+	{%- set childrenClasses = item.childrenAttribute('class') is not empty ? [item.childrenAttribute('class')] : [] %}
+	{%- set childrenClasses = childrenClasses|merge(item.level == 0 ? ['site-menu'] : ['site-menu-sub']) %}
+	{%- set listAttributes = item.childrenAttributes|merge({'class': childrenClasses|join(' ') }) %}
+	{%- set listAttributes = listAttributes|merge({'data-plugin': 'menu' }) %}
+	{{ block('list') -}}
+{% endblock %}
+
+{% block item %}
+	{% if item.displayed %}
+		{{ block('base_item') }}
+	{% endif %}
+{% endblock %}
+
+{% block base_item %}
+	{% if item.displayed %}
+		{# building the class of the item #}
+		{%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}
+		{%- set classes = classes|merge(['site-menu-item']) %}
+		{%- if matcher.isCurrent(item) %}
+			{%- set classes = classes|merge([options.currentClass]) %}
+		{%- elseif matcher.isAncestor(item, options.matchingDepth) %}
+			{%- set classes = classes|merge([options.ancestorClass]) %}
+		{%- endif %}
+		{%- if item.actsLikeFirst %}
+			{%- set classes = classes|merge([options.firstClass]) %}
+		{%- endif %}
+		{%- if item.actsLikeLast %}
+			{%- set classes = classes|merge([options.lastClass]) %}
+		{%- endif %}
+
+		{# Mark item as "leaf" (no children) or as "branch" (has children that are displayed) #}
+		{% if item.hasChildren and options.depth is not same as(0) %}
+			{% if options.branch_class is not empty and item.displayChildren %}
+				{%- set classes = classes|merge([options.branch_class]) %}
+			{% endif %}
+		{% elseif options.leaf_class is not empty %}
+			{%- set classes = classes|merge([options.leaf_class]) %}
+		{%- endif %}
+		{%-if item.hasChildren and options.depth is not same as(0) -%}
+			{%- set classes = classes|merge(['has-sub']) %}
+			{% if item.level == 1 %}
+				{%- set classes = classes|merge(['dropdown']) %}
+			{% endif %}
+		{%- endif -%}
+		{% if 'has_section' in item.attributes|keys %}
+			{%- set classes = classes|merge(['has-section']) %}
+		{% endif %}
+		{% if 'section_header' in item.attributes|keys %}
+			{%- set classes = classes|merge(['site-menu-section']) %}
+		{% endif %}
+
+		{%- set attributes = item.attributes %}
+		{%- if classes is not empty %}
+			{%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
+		{%- endif %}
+		{# displaying the item #}
+		{% import _self as knp_menu %}
+		<li{{ knp_menu.attributes(attributes) }}>
+			{% set isSectionHeader = 'section_header' in item.attributes|keys %}
+			{% if isSectionHeader %}
+				{{ block('sectionHeader') }}
+			{% else %}
+				{{ block('linkElement') }}
+			{% endif %}
+			{# render the list of children#}
+			{%- set childrenClasses = item.childrenAttribute('class') is not empty ? [item.childrenAttribute('class')] : [] %}
+			{%- set childrenClasses = childrenClasses|merge(['site-menu-sub']) %}
+			{% if 'has_section' not in item.attributes|keys %}
+				{% if item.level == 1 %}
+					{%- set childrenClasses = childrenClasses|merge(['site-menu-normal-list']) %}
+				{% endif %}
+			{% else %}
+				{%- set childrenClasses = childrenClasses|merge(['dropdown-menu site-menu-section-wrap']) %}
+			{% endif %}
+			{% if 'section_header' in item.attributes|keys %}
+				{%- set childrenClasses = childrenClasses|merge(['site-menu-section-list']) %}
+			{% endif %}
+			{%- set listAttributes = item.childrenAttributes|merge({'class': childrenClasses|join(' ') }) %}
+			{% if item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
+				{{ block('subList') }}
+			{% endif %}
+		</li>
+	{% endif %}
+{% endblock %}
+
+{% block subList %}
+	{% if item.level == 1 and 'has_section' not in item.attributes|keys%}
+		<div class="dropdown-menu">
+			<div class="site-menu-scroll-wrap is-list">
+				<div>
+					<div>
+						{{ block('list') }}
+					</div>
+				</div>
+			</div>
+		</div>
+	{% elseif item.level > 1 and 'section_header' in item.attributes|keys %}
+		<div class="site-menu-scroll-wrap is-section">
+			<div>
+				<div>
+					{{ block('list') }}
+				</div>
+			</div>
+		</div>
+	{% else %}
+		{{ block('list') }}
+	{% endif %}
+{% endblock %}
+
+{%- block linkElement -%}
+	{%- import _self as knp_menu -%}
+	{%- set linkAttributes = item.linkAttributes -%}
+	{%- set classes = item.linkAttribute('class') is not empty ? [item.linkAttribute('class')] : [''] %}
+	{%- set classes = classes|merge(['animsition-link']) %}
+	{%- set linkAttributes = linkAttributes|merge({'class': classes|join(' ') }) %}
+	{%-if item.hasChildren and options.depth is not same as(0) and item.level == 1 -%}
+		{%- set linkAttributes = linkAttributes|merge({'data-toggle': 'dropdown', 'data-dropdown-toggle': 'false'}) %}
+	{%- endif -%}
+	<a href="{{ item.uri is defined and item.uri ? item.uri : 'javascript:void(0);' }}"{{ knp_menu.attributes(linkAttributes) }}>{{ block('label') }}
+		{%- if item.hasChildren and options.depth is not same as(0) -%}<span class="site-menu-arrow"></span>{%- endif -%}
+	</a>
+{%- endblock -%}
+
+{%- block sectionHeader -%}
+<header>
+	{{ block('label') }}
+</header>
+{%- endblock -%}
+
+{% block label %}
+	{%- import _self as knp_menu -%}
+	{%- set translation_domain = item.extra('translation_domain', 'messages') -%}
+	{%- set label = item.label -%}
+	{%- if translation_domain is not same as(false) -%}
+		{%- set label = label|trans(item.extra('translation_params', {}), translation_domain) -%}
+	{%- endif -%}
+	{% set extra = 'extra' in item.labelAttributes|keys ? item.labelAttributes.extra : false %}
+	{% if extra %}<span class="{{ extra.class|default('badge pull-right') }}">{{ extra.value|default('') }}</span>{% endif %}
+	{% set icon = 'icon' in item.labelAttributes|keys ? item.labelAttributes.icon : false %}
+	{% if icon %}<i class="site-menu-icon {{ icon }}"></i> {% endif %}
+	<span{{ knp_menu.attributes(item.labelAttributes) }}>{%- if options.allow_safe_labels and item.extra('safe_label', false) %}{{ label|raw }}{% else %}{{ label }}{% endif -%}</span>
+{% endblock %}
+
+{% macro attributes(attr) %}
+	{% set excludedAttributes = ['icon', 'has_section', 'section_header', 'extra'] %}
+	{% for name, value in attr if name not in excludedAttributes %}
+		{%- if value is not none and value is not same as(false) -%}
+			{{- ' %s="%s"'|format(name, value is same as(true) ? name|e : value|e)|raw -}}
+		{%- endif -%}
+	{%- endfor -%}
+{% endmacro %}
